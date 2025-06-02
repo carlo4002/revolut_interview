@@ -17,7 +17,7 @@ locals {
 resource "aws_instance" "postgres_instances_primary" {
     count         = length(local.postgres_instances_primary)
     ami           = var.ami_id_primary
-    instance_type = "t2.micro" 
+    instance_type = var.instance_type
     availability_zone = local.postgres_instances_primary[count.index].zone
     subnet_id = aws_subnet.private_subnet_region1[count.index].id
     vpc_security_group_ids = [aws_security_group.postgres_sg_region1.id]
@@ -25,7 +25,7 @@ resource "aws_instance" "postgres_instances_primary" {
     tags = {
         Name        = local.postgres_instances_primary[count.index].name
         project     = "Revolut"
-        environment = "primary"
+        environment = var.env1
         region      = var.region1
         owner       = var.owner
         application = "postgres"
@@ -38,7 +38,7 @@ resource "aws_instance" "postgres_instances_primary" {
 resource "aws_instance" "postgres_instances_secondary" {
     count         = length(local.postgres_instances_secondary)
     ami           = var.ami_id_secondary
-    instance_type = "t2.micro" 
+    instance_type = var.instance_type
     availability_zone = local.postgres_instances_secondary[count.index].zone
     subnet_id = aws_subnet.private_subnet_region2[count.index].id
     vpc_security_group_ids = [aws_security_group.postgres_sg_region2.id]
@@ -46,7 +46,7 @@ resource "aws_instance" "postgres_instances_secondary" {
     tags = {
         Name        = local.postgres_instances_secondary[count.index].name
         project     = "Revolut"
-        environment = "secondary"
+        environment = var.env2
         region      = var.region2
         owner       = var.owner
         application = "postgres"

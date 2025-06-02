@@ -5,7 +5,7 @@ resource "aws_network_acl" "nacl_primary" {
     tags = {
         Name        = "Primary Region NACL"
         project     = "Revolut"
-        environment = "primary"
+        environment = var.env1
         region      = var.region1
         owner       = var.owner
         application = "revolut"
@@ -20,7 +20,7 @@ resource "aws_network_acl" "nacl_secondary" {
     tags = {
         Name        = "Secondary Region NACL"
         project     = "Revolut"
-        environment = "secondary"
+        environment = var.env2
         region      = var.region2
         owner       = var.owner
         application = "revolut"

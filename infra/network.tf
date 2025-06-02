@@ -9,7 +9,7 @@ resource "aws_vpc" "vpc_region1" {
     tags = {
         Name = "Revolut VPC Primary Region"
         project = "Revolut"
-        environment = "primary"
+        environment = var.env1
         region = var.region1
         owner = var.owner
         application = "revolut"
@@ -27,7 +27,7 @@ resource "aws_vpc" "vpc_region2" {
     tags = {
         Name = "Revolut VPC Secondary Region"
         project = "Revolut"
-        environment = "secondary"
+        environment = var.env2
         region = var.region2
         owner = var.owner
         application = "revolut"
@@ -44,7 +44,7 @@ resource "aws_subnet" "private_subnet_region1" {
     tags = {
         Name        = "Revolut Private Subnet Primary Region ${count.index + 1}"
         project     = "Revolut"
-        environment = "primary"
+        environment = var.env1
         region      = var.region1
         owner       = var.owner
         application = "revolut"
@@ -63,7 +63,7 @@ resource "aws_subnet" "private_subnet_region2" {
     tags = {
         Name        = "Revolut Private Subnet Secondary Region ${count.index + 1}"
         project     = "Revolut"
-        environment = "secondary"
+        environment = var.env2
         region      = var.region2
         owner       = var.owner
         application = "revolut"
@@ -101,7 +101,7 @@ resource "aws_security_group" "postgres_sg_region1" {
     tags = {
         Name        = "Postgres SG Primary Region"
         project     = "Revolut"
-        environment = "primary"
+        environment = var.env1
         region      = var.region1
         owner       = var.owner
         application = "revolut"
@@ -132,7 +132,7 @@ resource "aws_security_group" "postgres_sg_region2" {
     tags = {
         Name        = "Postgres SG Secondary Region"
         project     = "Revolut"
-        environment = "secondary"
+        environment = var.env2
         region      = var.region2
         owner       = var.owner
         application = "revolut"

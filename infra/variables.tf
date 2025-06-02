@@ -10,6 +10,18 @@ variable "region2" {
     default     = "eu-west-1"
 }
 
+variable "env1" {
+    description = "Environment for the primary region"
+    type        = string
+    default     = "primary_production"
+  
+}
+
+variable "env2" {
+    description = "Environment for the secondary region"
+    type        = string
+    default     = "secondary_production"
+}
 variable "assume_role_arn" {
     description = "The ARN of the role to assume"
     type        = string
@@ -23,6 +35,13 @@ variable ami_id_primary {
 variable ami_id_secondary {
     description = "The AMI ID to use for the instance"
     type        = string
+}
+
+variable instance_type {
+    description = "The type of instance to use"
+    type        = string
+    default     = "t2.micro"
+  
 }
 
 variable "vpc_cidr1" {

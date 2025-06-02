@@ -3,6 +3,9 @@ ami_id_primary = "ami-074e262099d145e90"
 ami_id_secondary = "ami-03d8b47244d950bbb"
 cost_center=202506
 owner = "infra_user"
+#environment 
+env1 = "primary_production"
+env2 = "secondary_production"
 
 # Regions
 region1 = "eu-west-3" # Primary region
