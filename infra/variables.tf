@@ -15,7 +15,12 @@ variable "assume_role_arn" {
     type        = string
 }
 
-variable ami_id {
+variable ami_id_primary {
+    description = "The AMI ID to use for the instance"
+    type        = string
+}
+
+variable ami_id_secondary {
     description = "The AMI ID to use for the instance"
     type        = string
 }
@@ -55,7 +60,7 @@ variable "subnet_cidrs_app_primary" {
   type        = list(string)
 }
 
-variable "subnet_cidrs__app_secondary" {
+variable "subnet_cidrs_app_secondary" {
   description = "List of CIDR blocks for apps subnets in the secondary region."
   type        = list(string)
 }
@@ -68,4 +73,30 @@ variable "availability_zones_primary" {
 variable "availability_zones_secondary" {
   description = "List of availability zones for the secondary region."
   type        = list(string)   
+}
+
+variable "postgres_instances_primary" {
+  description = "List of PostgreSQL instance names in the primary region."
+  type        = map(object({
+    name = string
+    zone = string
+  }))
+  default = {
+    "db1" = { name = "db1", zone = "a" },
+    "db2" = { name = "db2", zone = "b" },
+    "db3" = { name = "db3", zone = "c" }
+  }
+}
+
+variable "postgres_instances_secondary" {
+  description = "List of PostgreSQL instance names in the secondary region."
+  type        = map(object({
+    name = string
+    zone = string
+  }))
+    default = {
+    "db1" = { name = "db1", zone = "a" },
+    "db2" = { name = "db2", zone = "b" },
+    "db3" = { name = "db3", zone = "c" }
+  }
 }

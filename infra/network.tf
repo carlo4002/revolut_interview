@@ -75,3 +75,68 @@ resource "aws_subnet" "private_subnet_region2" {
     map_public_ip_on_launch = false
   
 }
+
+## Security Groups for PostgreSQL
+
+resource "aws_security_group" "postgres_sg_region1" {
+    name        = "postgres-sg-primary"
+    description = "Allow PostgreSQL traffic in the primary region"
+    vpc_id      = aws_vpc.vpc_region1.id
+    provider    = aws.primary_region
+
+    ingress {
+        from_port   = 5432
+        to_port     = 5432
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_app_primary
+    }
+
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    tags = {
+        Name        = "Postgres SG Primary Region"
+        project     = "Revolut"
+        environment = "primary"
+        region      = var.region1
+        owner       = var.owner
+        application = "revolut"
+        cost_center = var.cost_center
+    }
+}
+
+resource "aws_security_group" "postgres_sg_region2" {
+    name        = "postgres-sg-secondary"
+    description = "Allow PostgreSQL traffic in the secondary region"
+    vpc_id      = aws_vpc.vpc_region2.id
+    provider    = aws.secondary_region
+
+    ingress {
+        from_port   = 5432
+        to_port     = 5432
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_app_secondary
+    }
+
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    tags = {
+        Name        = "Postgres SG Secondary Region"
+        project     = "Revolut"
+        environment = "secondary"
+        region      = var.region2
+        owner       = var.owner
+        application = "revolut"
+        cost_center = var.cost_center
+    }
+}
+
