@@ -11,16 +11,18 @@ env2 = "secondary_production"
 region1 = "eu-west-3" # Primary region
 region2 = "eu-west-1" # Secondary region
 
+availability_zones_primary = ["eu-west-3a", "eu-west-3b", "eu-west-3c"]
+availability_zones_secondary = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+
 # Network Configuration
 
 vpc_cidr1 = "10.11.0.0/16"
 vpc_cidr2 = "10.12.0.0/16"
 subnet_cidrs_db_primary = ["10.11.1.0/24", "10.11.2.0/24", "10.11.3.0/24"]
 subnet_cidrs_db_secondary = ["10.12.1.0/24", "10.12.2.0/24", "10.12.3.0/24"]
-subnet_cidrs_app_primary = ["10.21.1.0/24", "10.21.2.0/24", "10.21.3.0/24"]
-subnet_cidrs_app_secondary = ["10.22.1.0/24", "10.22.2.0/24", "10.22.3.0/24"]
-availability_zones_primary = ["eu-west-3a", "eu-west-3b", "eu-west-3c"]
-availability_zones_secondary = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+subnet_cidrs_app_primary = ["10.11.11.0/24"] # "10.11.12.0/24", "10.11.13.0/24"] only 1 app subnet for simplicity
+subnet_cidrs_app_secondary = ["10.12.11.0/24"] # "10.12.12.0/24", "10.12.13.0/24"] only 1 app subnet for simplicity
+
 
 postgres_instances_primary = {
     db1 = {

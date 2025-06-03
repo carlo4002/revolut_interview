@@ -1,15 +1,32 @@
-provider "aws" {
-  region = var.region1
-  assume_role {
-    role_arn = var.assume_role_arn
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
   }
-  alias = "primary_region"
 }
 
 provider "aws" {
-  region = var.region2
-  assume_role {
-    role_arn = var.assume_role_arn
-  }
-  alias = "secondary_region"
+  region  = "eu-west-3"
 }
+
+
+provider "aws" {
+    alias  = "primary_region"
+    region = var.region1
+    # assume_role {
+    #       role_arn = var.assume_role_arn
+    # }
+    profile = "infra"
+}
+
+provider "aws" {
+    alias  = "secondary_region"
+    region = var.region2
+    # assume_role {
+    #      role_arn = var.assume_role_arn
+    # }
+    profile = "infra"
+}
+
