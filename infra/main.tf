@@ -16,26 +16,7 @@ locals {
     ]
 }
 
-variable "ssm_user_data" {
-  default = <<-EOF
-    #!/bin/bash
-    exec &> /tmp/init.log
-    if [ -f /etc/system-release ]; then
-      yum install -y amazon-ssm-agent
-      systemctl enable amazon-ssm-agent
-      systemctl start amazon-ssm-agent
-      
-    elif [ -f /etc/debian_version ]; then
-      apt-get update
-      apt-get install -y amazon-ssm-agent
-      systemctl enable amazon-ssm-agent
-      systemctl start amazon-ssm-agent
-    fi
-    echo "SSM Agent installed and started successfully."
-    # Additional commands can be added here
-    "
-  EOF
-}
+
 
 resource "aws_iam_role" "session_manager_role" {
     name               = "session-manager-role"
@@ -80,7 +61,7 @@ resource "aws_instance" "postgres_instances_primary" {
     count         = length(local.postgres_instances_primary)
     ami           = var.ami_id_primary
     instance_type = var.instance_type
-    user_data = var.ssm_user_data
+    user_data = file("${path.module}/init.sh")
     availability_zone = local.postgres_instances_primary[count.index].zone
     subnet_id = aws_subnet.private_subnet_region1[count.index].id
     vpc_security_group_ids = [aws_security_group.postgres_sg_region1.id, aws_security_group.ssm_sg_region1.id]
@@ -103,7 +84,7 @@ resource "aws_instance" "postgres_instances_secondary" {
     count         = length(local.postgres_instances_secondary)
     ami           = var.ami_id_secondary
     instance_type = var.instance_type
-    user_data = var.ssm_user_data
+    user_data = file("${path.module}/init.sh")
     availability_zone = local.postgres_instances_secondary[count.index].zone
     subnet_id = aws_subnet.private_subnet_region2[count.index].id
     vpc_security_group_ids = [aws_security_group.postgres_sg_region2.id, aws_security_group.ssm_sg_region2.id]
