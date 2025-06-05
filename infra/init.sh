@@ -21,8 +21,8 @@ echo "Attempting to install ansible-core using dnf..."
 dnf install -y ansible-core
 echo "Attempting to install git using dnf..."
 dnf install -y git
-
-
+echo "Installing amazon.aws."
+ansible-galaxy collection install amazon.aws
 
 rm -rf ${TARGET_DIR}/deployement_postgres
 
@@ -31,3 +31,25 @@ cd "$TARGET_DIR"
 echo "Attempting to clone repository into ${TARGET_DIR}..."
 
 git clone "${CLONE_URL}"
+
+if [ $? -ne 0 ]; then
+    echo "Failed to clone repository. Please check the URL and your credentials."
+    exit 1
+fi
+echo "Repository cloned successfully."
+echo "Changing directory to deployement_postgres..."
+cd ${TARGET_DIR}/deployement_postgres
+echo "Running main.sh script..."
+bash main.sh   > /tmp/main.log 2>&1 &
+
+# Get the PID of the last background job
+pid=$!
+
+# Wait for the background job to finish
+wait $pid
+# Check if the main.sh script executed successfully
+
+if [ $? -ne 0 ]; then
+    echo "main.sh script failed. Please check /tmp/main.log for details."
+    exit 1
+fi

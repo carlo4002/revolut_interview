@@ -314,67 +314,31 @@ resource "aws_route_table_association" "private_route_assoc_secondary" {
     provider       = aws.secondary_region
 }
 
-## Security Groups for PostgreSQL
 
-resource "aws_security_group" "postgres_sg_region1" {
-    name        = "postgres-sg-primary"
-    description = "Allow PostgreSQL traffic in the primary region"
-    vpc_id      = aws_vpc.vpc_region1.id
-    provider    = aws.primary_region
+## SSH Key Pair Configuration
 
-    ingress {
-        from_port   = 5432
-        to_port     = 5432
-        protocol    = "tcp"
-        cidr_blocks = var.subnet_cidrs_app_primary
-    }
-
-    egress {
-        from_port   = 0
-        to_port     = 0
-        protocol    = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    tags = {
-        Name        = "Postgres SG Primary Region"
-        project     = "Revolut"
-        environment = var.env1
-        region      = var.region1
-        owner       = var.owner
-        application = "revolut"
-        cost_center = var.cost_center
-    }
+resource "tls_private_key" "ssh_key" {
+    algorithm = "RSA"
+    rsa_bits  = 2048
 }
 
-resource "aws_security_group" "postgres_sg_region2" {
-    name        = "postgres-sg-secondary"
-    description = "Allow PostgreSQL traffic in the secondary region"
-    vpc_id      = aws_vpc.vpc_region2.id
-    provider    = aws.secondary_region
-
-    ingress {
-        from_port   = 5432
-        to_port     = 5432
-        protocol    = "tcp"
-        cidr_blocks = var.subnet_cidrs_app_secondary
-    }
-
-    egress {
-        from_port   = 0
-        to_port     = 0
-        protocol    = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    tags = {
-        Name        = "Postgres SG Secondary Region"
-        project     = "Revolut"
-        environment = var.env2
-        region      = var.region2
-        owner       = var.owner
-        application = "revolut"
-        cost_center = var.cost_center
-    }
+resource "aws_key_pair" "ssh_key_pair1" {
+    key_name   = "revolut_ssh_key"
+    public_key = tls_private_key.ssh_key.public_key_openssh
+    provider = aws.primary_region
 }
 
+resource "aws_key_pair" "ssh_key_pair2" {
+    key_name   = "revolut_ssh_key"
+    public_key = tls_private_key.ssh_key.public_key_openssh
+    provider = aws.secondary_region
+}
+
+output "ssh_private_key" {
+  value     = tls_private_key.ssh_key.private_key_pem
+  sensitive = true
+}
+
+output "ssh_public_key" {
+  value = tls_private_key.ssh_key.public_key_openssh
+}
