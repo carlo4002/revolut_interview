@@ -15,14 +15,17 @@ echo "Starting Ansible installation script."
 echo "Running as user: $(whoami)"
 
 yum update -y
-echo "Attempting to install ansible using dnf..."
-dnf install -y ansible
-echo "Attempting to install ansible-core using dnf..."
-dnf install -y ansible-core
+echo "Attempting to install pip"
+dnf install python3-pip -y
+echo "Attempting to install ansible using pip..."
+pip install ansible==6.7.0
+# Uncomment the following lines if you want to install ansible-core using dnf
+# echo "Attempting to install ansible-core using dnf..."
+# dnf install -y ansible-core
 echo "Attempting to install git using dnf..."
 dnf install -y git
 echo "Installing amazon.aws."
-ansible-galaxy collection install amazon.aws
+/usr/local/bin/ansible-galaxy collection install amazon.aws
 
 rm -rf ${TARGET_DIR}/deployement_postgres
 

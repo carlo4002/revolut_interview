@@ -114,3 +114,73 @@ resource "aws_security_group" "allow_ssh2" {
     }
     provider = aws.secondary_region
 }
+
+## Security Groups for etcd
+
+resource "aws_security_group" "etcd_sg_region1" {
+    name        = "etcd-sg-primary"
+    description = "Allow etcd traffic in the primary region"
+    vpc_id      = aws_vpc.vpc_region1.id
+    provider    = aws.primary_region
+    ingress {
+        from_port   = 2379
+        to_port     = 2379
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_app_primary
+    }
+    ingress {
+        from_port   = 2380
+        to_port     = 2380
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_app_primary
+    }
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["10.8.0.0/13"]
+    }
+    tags = {
+        Name = "ectd SG Primary Region"
+        project     = "Revolut"
+        environment = var.env1
+        region      = var.region1
+        owner       = var.owner
+        application = "revolut"
+        cost_center = var.cost_center
+    }
+    
+}
+resource "aws_security_group" "etcd_sg_region2" {
+    name        = "etcd-sg-secondary"
+    description = "Allow etcd traffic in the secondary region"
+    vpc_id      = aws_vpc.vpc_region2.id
+    provider    = aws.secondary_region
+    ingress {
+        from_port   = 2379
+        to_port     = 2379
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_db_secondary
+    }
+    ingress {
+        from_port   = 2380
+        to_port     = 2380
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_db_secondary
+    }
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["10.8.0.0/13"]
+    }
+    tags = {
+        Name = "ectd SG Secondary Region"
+        project     = "Revolut"
+        environment = var.env2
+        region      = var.region2
+        owner       = var.owner
+        application = "revolut"
+        cost_center = var.cost_center
+    }
+}
