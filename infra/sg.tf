@@ -126,19 +126,37 @@ resource "aws_security_group" "etcd_sg_region1" {
         from_port   = 2379
         to_port     = 2379
         protocol    = "tcp"
-        cidr_blocks = var.subnet_cidrs_app_primary
+        cidr_blocks = var.subnet_cidrs_db_primary
     }
     ingress {
         from_port   = 2380
         to_port     = 2380
         protocol    = "tcp"
-        cidr_blocks = var.subnet_cidrs_app_primary
+        cidr_blocks = var.subnet_cidrs_db_primary
+    }
+     ingress {
+        from_port   = 2379
+        to_port     = 2379
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_db_secondary
+    }
+    ingress {
+        from_port   = 2380
+        to_port     = 2380
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_db_secondary
+    }
+    ingress {
+        from_port   = 2379
+        to_port     = 2379
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_db_primary
     }
     egress {
         from_port   = 0
         to_port     = 0
         protocol    = "-1"
-        cidr_blocks = ["10.8.0.0/13"]
+        cidr_blocks = ["10.11.0.0/16","10.12.0.0/16"]
     }
     tags = {
         Name = "ectd SG Primary Region"
@@ -168,11 +186,23 @@ resource "aws_security_group" "etcd_sg_region2" {
         protocol    = "tcp"
         cidr_blocks = var.subnet_cidrs_db_secondary
     }
+        ingress {
+        from_port   = 2379
+        to_port     = 2379
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_db_primary
+    }
+    ingress {
+        from_port   = 2380
+        to_port     = 2380
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_db_primary
+    }
     egress {
         from_port   = 0
         to_port     = 0
         protocol    = "-1"
-        cidr_blocks = ["10.8.0.0/13"]
+        cidr_blocks = ["10.11.0.0/16","10.12.0.0/16"]
     }
     tags = {
         Name = "ectd SG Secondary Region"
