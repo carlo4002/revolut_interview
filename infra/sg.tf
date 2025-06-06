@@ -10,7 +10,14 @@ resource "aws_security_group" "postgres_sg_region1" {
         from_port   = 5432
         to_port     = 5432
         protocol    = "tcp"
-        cidr_blocks = var.subnet_cidrs_app_primary
+        cidr_blocks = var.subnet_cidrs_db_primary
+    }
+
+    ingress {
+        from_port   = 5432
+        to_port     = 5432
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_db_secondary
     }
 
     egress {
@@ -41,7 +48,14 @@ resource "aws_security_group" "postgres_sg_region2" {
         from_port   = 5432
         to_port     = 5432
         protocol    = "tcp"
-        cidr_blocks = var.subnet_cidrs_app_secondary
+        cidr_blocks = var.subnet_cidrs_db_primary
+    }
+    
+    ingress {
+        from_port   = 5432
+        to_port     = 5432
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_db_secondary
     }
 
     egress {
@@ -169,6 +183,7 @@ resource "aws_security_group" "etcd_sg_region1" {
     }
     
 }
+
 resource "aws_security_group" "etcd_sg_region2" {
     name        = "etcd-sg-secondary"
     description = "Allow etcd traffic in the secondary region"
@@ -206,6 +221,78 @@ resource "aws_security_group" "etcd_sg_region2" {
     }
     tags = {
         Name = "ectd SG Secondary Region"
+        project     = "Revolut"
+        environment = var.env2
+        region      = var.region2
+        owner       = var.owner
+        application = "revolut"
+        cost_center = var.cost_center
+    }
+}
+
+# Ports for patroni
+
+resource "aws_security_group" "patroni_sg_region1" {
+    name        = "patroni-sg-primary"
+    description = "Allow patroni traffic in the primary region"
+    vpc_id      = aws_vpc.vpc_region1.id
+    provider    = aws.primary_region
+    ingress {
+        from_port   = 8008
+        to_port     = 8008
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_db_primary
+    }
+    ingress {
+        from_port   = 8008
+        to_port     = 8008
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_db_secondary
+    }
+
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["10.11.0.0/16","10.12.0.0/16"]
+    }
+    tags = {
+        Name = "patroni SG Primary Region"
+        project     = "Revolut"
+        environment = var.env1
+        region      = var.region1
+        owner       = var.owner
+        application = "revolut"
+        cost_center = var.cost_center
+    }
+    
+}
+resource "aws_security_group" "patroni_sg_region2" {
+    name        = "patroni-sg-secondary"
+    description = "Allow patroni traffic in the secondary region"
+    vpc_id      = aws_vpc.vpc_region2.id
+    provider    = aws.secondary_region
+    ingress {
+        from_port   = 8008
+        to_port     = 8008
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_db_primary
+    }
+    ingress {
+        from_port   = 8008
+        to_port     = 8008
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_db_secondary
+    }
+
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["10.11.0.0/16","10.12.0.0/16"]
+    }
+    tags = {
+        Name = "patroni SG Secondary Region"
         project     = "Revolut"
         environment = var.env2
         region      = var.region2
