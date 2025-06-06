@@ -15,6 +15,9 @@ echo "Starting Ansible installation script."
 echo "Running as user: $(whoami)"
 
 yum update -y
+echo "Attempting to install nmap-ncat"
+sudo dnf install nmap-ncat -y
+
 echo "Attempting to install pip"
 dnf install python3-pip -y
 echo "Attempting to install ansible using pip..."

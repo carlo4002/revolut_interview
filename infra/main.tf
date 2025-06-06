@@ -17,46 +17,6 @@ locals {
 }
 
 
-
-resource "aws_iam_role" "session_manager_role" {
-    name               = "session-manager-role"
-    assume_role_policy = jsonencode({
-        Version   = "2012-10-17"
-        Statement = [
-            {
-                Effect      = "Allow"
-                Principal   = {
-                        Service = "ec2.amazonaws.com"
-                }
-                Action      = "sts:AssumeRole"
-            }
-        ]
-    })
-
-    tags = {
-        Name        = "Session Manager Role"
-        project     = "Revolut"
-        environment = "global"
-        owner       = var.owner
-        cost_center = var.cost_center
-    }
-}
-
-resource "aws_iam_role_policy_attachment" "session_manager_attach" {
-    role       = aws_iam_role.session_manager_role.name
-    policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore" // AWS-managed policy for Systems Manager
-}
-
-resource "aws_iam_role_policy_attachment" "EC2RoleforSSM_attach" {
-    role       = aws_iam_role.session_manager_role.name
-    policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM" 
-}
-
-resource "aws_iam_instance_profile" "session_manager_profile" {
-    name = "session-manager-instance-profile"
-    role = aws_iam_role.session_manager_role.name
-}
-
 resource "aws_instance" "postgres_instances_primary" {
     count         = length(local.postgres_instances_primary)
     ami           = var.ami_id_primary
