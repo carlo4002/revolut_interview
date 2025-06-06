@@ -19,7 +19,7 @@ echo "Attempting to install nmap-ncat"
 sudo dnf install nmap-ncat -y
 
 echo "Attempting to install pip"
-dnf install python3-pip -y
+dnf install python3-pip mlocate -y
 echo "Attempting to install ansible using pip..."
 pip install ansible==6.7.0
 # Uncomment the following lines if you want to install ansible-core using dnf
@@ -29,7 +29,9 @@ echo "Attempting to install git using dnf..."
 dnf install -y git
 echo "Installing amazon.aws."
 /usr/local/bin/ansible-galaxy collection install amazon.aws
-
+echo "Instaling psycopg2-binary"
+pip install psycopg2-binary
+pip install python-etcd
 rm -rf ${TARGET_DIR}/deployement_postgres
 
 echo "Changing directory to ${TARGET_DIR}..."
