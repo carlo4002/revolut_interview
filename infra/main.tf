@@ -15,7 +15,28 @@ locals {
         }
     ]
 }
-
+resource "aws_instance" "app_instances_primary"{
+    ami = var.ami_id_primary
+    instance_type = var.instance_type
+    user_data = file("${path.module}/app_init.sh")
+    availability_zone = var.region1
+    subnet_id = aws_subnet.public_subnet_region1[0].id
+    vpc_security_group_ids = [aws_security_group.app_sg_region1.id,
+    aws_security_group.ssm_sg_region1.id,
+    aws_security_group.allow_ssh.id]
+    iam_instance_profile = aws_iam_instance_profile.session_manager_profile.name
+    key_name = aws_key_pair.ssh_key_pair1.key_name
+    tags = {
+        Name        = "app-instance-primary"
+        project     = "Revolut"
+        environment = var.env1
+        region      = var.region1
+        owner       = var.owner
+        application = "app"
+        cost_center = var.cost_center
+    }
+    provider = aws.primary_region
+}
 
 resource "aws_instance" "postgres_instances_primary" {
     count         = length(local.postgres_instances_primary)
