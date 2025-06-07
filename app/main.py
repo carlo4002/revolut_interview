@@ -2,9 +2,14 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 import re
+import os
 
+# Get the target IP address from environment variable or default to localhost
+target_ip = os.getenv("TARGET_IP_ADDRESS")
+if not target_ip:
+    target_ip = 'localhost'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://app:password@192.168.0.34:5432/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://app:password@" + target_ip +":5432/postgres"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
