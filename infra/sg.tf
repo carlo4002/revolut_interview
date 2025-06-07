@@ -8,13 +8,6 @@ resource "aws_security_group" "app_sg_region1"{
 
 
     ingress {
-        from_port   = 443
-        to_port     = 443
-        protocol    = "tcp"
-        cidr_blocks = var.subnet_cidrs_app_secondary
-    }
-
-    ingress {
         from_port   = 5000
         to_port     = 5000
         protocol    = "tcp"
@@ -38,6 +31,8 @@ resource "aws_security_group" "app_sg_region1"{
     }
 }
 
+
+
 resource "aws_security_group" "postgres_sg_region1" {
     name        = "postgres-sg-primary"
     description = "Allow PostgreSQL traffic in the primary region"
@@ -50,7 +45,18 @@ resource "aws_security_group" "postgres_sg_region1" {
         protocol    = "tcp"
         cidr_blocks = var.subnet_cidrs_db_primary
     }
-
+    ingress {
+        from_port   = 5432
+        to_port     = 5432
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_app_primary
+    }
+    ingress {
+        from_port   = 5432
+        to_port     = 5432
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_app_secondary
+    }
     ingress {
         from_port   = 5432
         to_port     = 5432
@@ -95,7 +101,18 @@ resource "aws_security_group" "postgres_sg_region2" {
         protocol    = "tcp"
         cidr_blocks = var.subnet_cidrs_db_secondary
     }
-
+        ingress {
+        from_port   = 5432
+        to_port     = 5432
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_app_primary
+    }
+    ingress {
+        from_port   = 5432
+        to_port     = 5432
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_app_secondary
+    }
     egress {
         from_port   = 0
         to_port     = 0

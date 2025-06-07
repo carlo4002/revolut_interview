@@ -14,6 +14,8 @@ echo "install jq"
 yum install jq -y
 echo "install python3-pip"
 yum install python3-pip -y
+echo "Attempting to install nmap-ncat"
+sudo dnf install nmap-ncat -y
 
 REPO_URL="github.com/carlo4002/revolut_interview.git"
 GITHUB_USERNAME="carlo4002"
@@ -38,3 +40,15 @@ PUBLIC_IP=`aws ec2 describe-instances \
     --query "Reservations[].Instances[].PublicIpAddress" \
     --output text`
 
+PRIVATE_IP=`aws ec2 describe-instances \
+    --instance-ids ${INSTANCE_ID} \
+    --query "Reservations[].Instances[].PrivateIpAddress" \
+    --output text`
+
+echo "run the next commands "
+
+echo "cd ${TARGET_DIR}/revolut_interview/app"
+
+echo "#building docker image..."
+echo "docker build -t app ."
+echo "docker run -t -i -p 5000:5000 app"
