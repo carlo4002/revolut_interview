@@ -15,7 +15,7 @@ yum install jq -y
 echo "install python3-pip"
 yum install python3-pip -y
 
-REPO_URL="github.com/carlo4002/deployement_postgres.git"
+REPO_URL="github.com/carlo4002/revolut_interview.git"
 GITHUB_USERNAME="carlo4002"
 PERSONAL_ACCESS_TOKEN=`aws secretsmanager get-secret-value --secret-id tokengithub --query SecretString --output text | jq -r '."tokengithub"'`
 CLONE_URL="https://${GITHUB_USERNAME}:${PERSONAL_ACCESS_TOKEN}@${REPO_URL}"
