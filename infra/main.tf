@@ -31,7 +31,8 @@ resource "aws_instance" "app_instances_primary"{
     subnet_id = aws_subnet.public_subnet_region1[0].id
     vpc_security_group_ids = [aws_security_group.app_sg_region1.id,
     aws_security_group.ssm_sg_region1.id,
-    aws_security_group.allow_ssh.id]
+    aws_security_group.allow_ssh.id,
+    aws_security_group.postgres_sg_region1.id,]
     iam_instance_profile = aws_iam_instance_profile.session_manager_profile.name
     key_name = aws_key_pair.ssh_key_pair1.key_name
     tags = {

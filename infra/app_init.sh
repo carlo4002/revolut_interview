@@ -49,6 +49,7 @@ echo "run the next commands "
 
 echo "cd ${TARGET_DIR}/revolut_interview/app"
 
-echo "#building docker image..."
+echo "building docker image..."
 echo "docker build -t app ."
-echo "docker run -t -i -p 5000:5000 app"
+
+echo "docker run -e TARGET_IP_ADDRESS="192.168.1.100" -t -i -p 5000:5000 app"
