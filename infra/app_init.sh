@@ -1,4 +1,5 @@
 #! /usr/bin/sh
+exec &> /tmp/app_init.log
 
 # --- Script Body ---
 echo "Starting application initialization script."
@@ -13,3 +14,27 @@ echo "install jq"
 yum install jq -y
 echo "install python3-pip"
 yum install python3-pip -y
+
+REPO_URL="github.com/carlo4002/deployement_postgres.git"
+GITHUB_USERNAME="carlo4002"
+PERSONAL_ACCESS_TOKEN=`aws secretsmanager get-secret-value --secret-id tokengithub --query SecretString --output text | jq -r '."tokengithub"'`
+CLONE_URL="https://${GITHUB_USERNAME}:${PERSONAL_ACCESS_TOKEN}@${REPO_URL}"
+TARGET_DIR="/opt/app"
+mkdir -p "$TARGET_DIR"
+echo "Changing directory to ${TARGET_DIR}..."
+cd "$TARGET_DIR"
+echo "Attempting to clone repository into ${TARGET_DIR}..."
+
+git clone "${CLONE_URL}"
+
+if [ $? -ne 0 ]; then
+    echo "Failed to clone repository. Please check the URL and your credentials."
+    exit 1
+fi
+
+echo "Getting public IP for local instance..."
+PUBLIC_IP=`aws ec2 describe-instances \
+    --instance-ids ${INSTANCE_ID} \
+    --query "Reservations[].Instances[].PublicIpAddress" \
+    --output text`
+

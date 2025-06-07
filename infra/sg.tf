@@ -1,5 +1,43 @@
 ## Security Groups for PostgreSQL
 
+resource "aws_security_group" "app_sg_region1"{
+    name        = "app-sg-primary"
+    description = "Allow application traffic in the primary region"
+    vpc_id      = aws_vpc.vpc_region1.id
+    provider    = aws.primary_region
+
+
+    ingress {
+        from_port   = 443
+        to_port     = 443
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_app_secondary
+    }
+
+    ingress {
+        from_port   = 5000
+        to_port     = 5000
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_app_primary
+    }
+
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+    tags = {
+        Name        = "App SG Primary Region"
+        project     = "Revolut"
+        environment = var.env1
+        region      = var.region1
+        owner       = var.owner
+        application = "revolut"
+        cost_center = var.cost_center
+    }
+}
+
 resource "aws_security_group" "postgres_sg_region1" {
     name        = "postgres-sg-primary"
     description = "Allow PostgreSQL traffic in the primary region"

@@ -14,12 +14,19 @@ locals {
             zone   = "${var.region2}${instance.zone}"
         }
     ]
+
+    app_instances_primary = [
+            {
+                name   = "app-instance-primary"
+                zone   = "${var.region1}a"
+            }
+    ]
 }
 resource "aws_instance" "app_instances_primary"{
     ami = var.ami_id_primary
     instance_type = var.instance_type
     user_data = file("${path.module}/app_init.sh")
-    availability_zone = var.region1
+    availability_zone = local.app_instances_primary[0].zone
     subnet_id = aws_subnet.public_subnet_region1[0].id
     vpc_security_group_ids = [aws_security_group.app_sg_region1.id,
     aws_security_group.ssm_sg_region1.id,
@@ -27,7 +34,7 @@ resource "aws_instance" "app_instances_primary"{
     iam_instance_profile = aws_iam_instance_profile.session_manager_profile.name
     key_name = aws_key_pair.ssh_key_pair1.key_name
     tags = {
-        Name        = "app-instance-primary"
+        Name        = local.app_instances_primary[0].name
         project     = "Revolut"
         environment = var.env1
         region      = var.region1
