@@ -1,9 +1,9 @@
 ## Dependencies ##
 Install:
 
-    yum install python3 pyhton3-pip
-    pip3 install flask_sqlalchemy psycopg2
-    pip3 install flask
+    yum install python3 pyhton3-pip DONE
+    pip3 install flask_sqlalchemy psycopg2  DONE
+    pip3 install flask  DONE
 
 ## Assumptions ###
 
