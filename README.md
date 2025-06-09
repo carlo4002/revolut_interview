@@ -1,12 +1,18 @@
-# Desing Postgres HA cluster
+# Desing Postgres High Availability cluster
 
-This project has as intention to build a HA postgres cluster on AWS using 
+This builds a high-availability postgres cluster on AWS using 
 instances ec2 with HAproxy, Postgresql, etcd, patroni.
 
 ## Infrastructure Overview
 
 This project uses OpenTofu to provision and manage the infrastructure, allowing for 
 consistent and repeatable deployments.
+Once infrastructure is deployed, a second phase is launched with ansible that will confure and prepare the ec2 instances to install all the software needed.
+- PostgreSQL
+- Patroni
+- ETCD
+- HAproxy
+
 
 ## Architecture Goals
 
@@ -26,7 +32,7 @@ Private subnets contains:
 
 Public subnets contain: 
 - A NAT Gateway
-- Application services that, connect to the database and are exposed to the internet
+- Application services that connect to the database and are exposed to the internet
 
 # High Availability Strategy
 PostgreSQL instances are distributed across both regions.
@@ -50,7 +56,7 @@ Here the process running in every node and the relation with haproxy, etc and pa
 <img src="https://github.com/carlo4002/revolut_interview/blob/main/images/db-arch.png" alt="Architecture per node" width="600"/>
 </p>
 
-# Better design scenario
+# Future improvements
 
 In this project, I’ve set up a high-availability PostgreSQL cluster, but there are still several areas that could be improved to achieve a more robust and production-grade architecture.
 
