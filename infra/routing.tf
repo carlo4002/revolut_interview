@@ -1,5 +1,5 @@
 
-
+## Route Table for Public Subnets in Primary Region
 resource "aws_route_table" "public_route_table_primary" {
     vpc_id = aws_vpc.vpc_region1.id
     provider = aws.primary_region
@@ -21,6 +21,7 @@ resource "aws_route_table_association" "public_route_assoc_primary" {
     provider       = aws.primary_region
 }
 
+## Route Table for Public Subnets in Secondary Region
 resource "aws_route_table" "public_route_table_secondary" {
     vpc_id = aws_vpc.vpc_region2.id
     provider = aws.secondary_region
