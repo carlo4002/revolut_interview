@@ -7,7 +7,7 @@ yum update -y
 yum install docker -y
 service docker start
 usermod -a -G docker ec2-user
-
+dnf install postgresql15 -y
 echo "install git"
 yum install git -y
 echo "install jq"
@@ -15,7 +15,7 @@ yum install jq -y
 echo "install python3-pip"
 yum install python3-pip -y
 echo "Attempting to install nmap-ncat"
-sudo dnf install nmap-ncat -y
+dnf install nmap-ncat -y
 
 REPO_URL="github.com/carlo4002/revolut_interview.git"
 GITHUB_USERNAME="carlo4002"
@@ -50,6 +50,7 @@ echo "run the next commands "
 echo "cd ${TARGET_DIR}/revolut_interview/app"
 
 echo "building docker image..."
-echo "docker build -t app ."
+docker build -t app .
+echo "Create the user and tables"
 
 echo "docker run -e TARGET_IP_ADDRESS="192.168.1.100" -t -i -p 5000:5000 app"

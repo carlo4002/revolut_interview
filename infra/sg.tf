@@ -356,3 +356,40 @@ resource "aws_security_group" "patroni_sg_region2" {
         cost_center = var.cost_center
     }
 }
+
+resource "aws_security_group" "haproxy_sg_region1" {
+    name        = "haproxy-sg-primary"
+    description = "Allow HAProxy traffic in the primary region"
+    vpc_id      = aws_vpc.vpc_region1.id
+    provider    = aws.primary_region
+
+    ingress {
+        from_port   = 7000
+        to_port     = 7000
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_app_primary
+    }
+    
+    ingress {
+        from_port   = 7000
+        to_port     = 7000
+        protocol    = "tcp"
+        cidr_blocks = var.subnet_cidrs_app_secondary
+    }
+
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["10.11.0.0/16","10.12.0.0/16"]
+    }
+    tags = {
+        Name = "HAProxy SG Primary Region"
+        project     = "Revolut"
+        environment = var.env1
+        region      = var.region1
+        owner       = var.owner
+        application = "revolut"
+        cost_center = var.cost_center
+    }
+}

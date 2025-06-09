@@ -107,4 +107,26 @@ resource "aws_instance" "postgres_instances_secondary" {
     provider = aws.secondary_region
 }
 
+resource "aws_instance" "haproxy_standalone" {
+    ami           = var.ami_id_primary
+    instance_type = var.instance_type
+    user_data = file("${path.module}/haproxy_init.sh")
+    availability_zone = "${var.region1}a"
+    subnet_id = aws_subnet.private_subnet_region1[0].id
+    vpc_security_group_ids = [aws_security_group.haproxy_sg_region1.id, 
+    aws_security_group.ssm_sg_region1.id]
+    iam_instance_profile = aws_iam_instance_profile.session_manager_profile.name
+    key_name = aws_key_pair.ssh_key_pair1.key_name
 
+    tags = {
+        Name        = "haproxy-standalone"
+        project     = "Revolut"
+        environment = var.env1
+        region      = var.region1
+        owner       = var.owner
+        application = "haproxy"
+        cost_center = var.cost_center
+    }
+
+    provider = aws.primary_region
+}
