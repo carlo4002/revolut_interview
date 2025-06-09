@@ -1,6 +1,5 @@
 # revolut_interview
 
 ## Infrastructure Code
-<img src="/images/arch1.png" alt="Architecture" title="Architecture">
-
+![Alt text]( https://github.com/carlo4002/revolut_interview/blob/main/images/ach1.png "Architecture")
 ## Application Code
