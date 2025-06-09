@@ -4,7 +4,7 @@
 
 exec &> /tmp/init.log
 
-REPO_URL="https://github.com/carlo4002/deployement_haproxy.git"
+REPO_URL="github.com/carlo4002/deployement_haproxy.git"
 GITHUB_USERNAME="carlo4002"
 PERSONAL_ACCESS_TOKEN=`aws secretsmanager get-secret-value --secret-id tokengithub --query SecretString --output text | jq -r '."tokengithub"'`
 CLONE_URL="https://${GITHUB_USERNAME}:${PERSONAL_ACCESS_TOKEN}@${REPO_URL}"

@@ -237,8 +237,6 @@ resource "aws_vpc_peering_connection_accepter" "vpc_peering_accepter" {
   }
 }
 
-
-
 ## SSH Key Pair Configuration
 
 resource "tls_private_key" "ssh_key" {
