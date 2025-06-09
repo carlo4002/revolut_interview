@@ -79,3 +79,59 @@ The application will provide a rest API no TLS connection on the port 5000
 
 The application will be developed using Flask (Python) and deployed on AWS.
 In the instance app, the code is containerized and run in the background as a service.
+
+# How to run the infrastructure provisioning
+
+1. Install opentofu
+2. Open an aws account and create a user infra_user with the next permissions
+  ```
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::154983253182:role/<deployment role>"
+        }
+  ```
+3. Create a role with the needed permiossion do the user infra_user can assume it.
+
+  - AmazonEC2FullAccess
+  - AWS managed
+  - AmazonSSMFullAccess
+  - AWS managed
+  - AmazonVPCFullAccess
+  - AWS managed
+  - iam:AddRoleToInstanceProfile
+  - iam:CreateRole
+  - iam:DeleteRole
+  - iam:GetPolicy
+  - iam:AttachRolePolicy
+  - iam:CreatePolicy
+  - iam:CreatePolicyVersion
+  - iam:ListAttachedUserPolicies
+  - iam:ListAttachedRolePolicies
+  - iam:ListRoles
+  - iam:CreateInstanceProfile
+  - iam:TagRole
+  - iam:GetRole
+  - ElasticLoadBalancingFullAccess
+   
+4. Store the github tokens on S3 buckets so ec2 instances can clone the repositiories to run the ansible playbook
+5. Configure opentofu access to aws [here](https://developer.hashicorp.com/terraform/tutorials/aws-get-started)
+6. Run the opentofu command
+```
+    tofu plan
+    tofu apply
+```
+7. Connect to a one of the postgres nodes in anyregion and run
+`patronictl -c /etc/patroni/patroni.yml list`
+This is gonna tell us when the cluster is ready ( we need at least 1 node up and running)
+Installation takes a while (download and install) So normally app instance is up and service start running before the postgres cluster is ready.
+8. Relaunch the app instance
+   `tofu apply -replace="aws_instance.app_instances_primary`
+9. Connect to the instance by SSM and run the command
+```
+    nc -vz localhost 5000
+    curl -XGET http://localhost:5000/hello?username=julio
+    curl -XPUT http://localhost:5000/hello/julio -H 'Content-Type: application/json' -d '{"dateOfBirth":"1984-06-28"}'
+    curl -XGET http://localhost:5000/hello?username=julio
+```
