@@ -39,11 +39,16 @@ Additional replicas can be deployed in the healthy region as needed.
 
 ### Design of insfrastructure
 
-![Alt text]( https://github.com/carlo4002/revolut_interview/blob/main/images/ach1.png "Architecture")
+<p align="center">
+<img src="https://github.com/carlo4002/revolut_interview/blob/main/images/ach1.png" alt="Architecture" width="600"/>
+</p>
 
 ### Desing of the node
 
-
+Here the process running in every node and the relation with haproxy, etc and patroni.
+<p align="center">
+<img src="https://github.com/carlo4002/revolut_interview/blob/main/images/db-arch.png" alt="Architecture per node" width="600"/>
+</p>
 # Application Code
 
 This part of the repository will contain the application code that will connect to the database.
