@@ -3,8 +3,8 @@
 # --- Script Body ---
 
 exec &> /tmp/init.log
-
-REPO_URL="github.com/carlo4002/deployement_postgres.git"
+REPO_NAME="deployment_postgres"
+REPO_URL="github.com/carlo4002/${REPO_NAME}.git"
 GITHUB_USERNAME="carlo4002"
 PERSONAL_ACCESS_TOKEN=`aws secretsmanager get-secret-value --secret-id tokengithub --query SecretString --output text | jq -r '."tokengithub"'`
 CLONE_URL="https://${GITHUB_USERNAME}:${PERSONAL_ACCESS_TOKEN}@${REPO_URL}"
@@ -32,7 +32,7 @@ echo "Installing amazon.aws."
 echo "Instaling psycopg2-binary"
 pip install psycopg2-binary
 pip install python-etcd
-rm -rf ${TARGET_DIR}/deployement_postgres
+rm -rf ${TARGET_DIR}/${REPO_NAME}
 
 echo "Changing directory to ${TARGET_DIR}..."
 cd "$TARGET_DIR"
@@ -45,8 +45,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 echo "Repository cloned successfully."
-echo "Changing directory to deployement_postgres..."
-cd ${TARGET_DIR}/deployement_postgres
+echo "Changing directory to ${REPO_NAME}..."
+cd ${TARGET_DIR}/${REPO_NAME}
 echo "Running main.sh script..."
 bash main.sh   > /tmp/main.log 2>&1 &
 
