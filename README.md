@@ -94,26 +94,26 @@ In the instance app, the code is containerized and run in the background as a se
   ```
 3. Create a role with the needed permiossion do the user infra_user can assume it.
 
-  - AmazonEC2FullAccess
-  - AWS managed
-  - AmazonSSMFullAccess
-  - AWS managed
-  - AmazonVPCFullAccess
-  - AWS managed
-  - iam:AddRoleToInstanceProfile
-  - iam:CreateRole
-  - iam:DeleteRole
-  - iam:GetPolicy
-  - iam:AttachRolePolicy
-  - iam:CreatePolicy
-  - iam:CreatePolicyVersion
-  - iam:ListAttachedUserPolicies
-  - iam:ListAttachedRolePolicies
-  - iam:ListRoles
-  - iam:CreateInstanceProfile
-  - iam:TagRole
-  - iam:GetRole
-  - ElasticLoadBalancingFullAccess
+      - AmazonEC2FullAccess
+      - AWS managed
+      - AmazonSSMFullAccess
+      - AWS managed
+      - AmazonVPCFullAccess
+      - AWS managed
+      - iam:AddRoleToInstanceProfile
+      - iam:CreateRole
+      - iam:DeleteRole
+      - iam:GetPolicy
+      - iam:AttachRolePolicy
+      - iam:CreatePolicy
+      - iam:CreatePolicyVersion
+      - iam:ListAttachedUserPolicies
+      - iam:ListAttachedRolePolicies
+      - iam:ListRoles
+      - iam:CreateInstanceProfile
+      - iam:TagRole
+      - iam:GetRole
+      - ElasticLoadBalancingFullAccess
    
 4. Store the github tokens on S3 buckets so ec2 instances can clone the repositiories to run the ansible playbook
 5. Configure opentofu access to aws [here](https://developer.hashicorp.com/terraform/tutorials/aws-get-started)
