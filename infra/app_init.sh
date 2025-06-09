@@ -63,4 +63,4 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 echo "Running the application in a Docker container..."
-docker run -e TARGET_IP_ADDRESS=${PRIVATE_IP_HAPROXY} -t -i -p 5000:5000 app &
+docker run -e TARGET_IP_ADDRESS=${PRIVATE_IP_HAPROXY} -d -p 5000:5000 app 
