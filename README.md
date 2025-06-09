@@ -52,8 +52,9 @@ Here the process running in every node and the relation with haproxy, etc and pa
 
 # Better design scenario
 
-In the project I create a HA posgres cluster but certains points need to be taken into account to get a more robust architecture. The ideal architecture
-in my opinion will be create a separate etcd cluster and haproxy, with there own multi region deployment. Like this in this design.
+In this project, I’ve set up a high-availability PostgreSQL cluster, but there are still several areas that could be improved to achieve a more robust and production-grade architecture.
+
+Ideally, the architecture should include a separate etcd cluster and HAProxy layer, each deployed across multiple regions. This would enhance fault tolerance and resilience, as shown in the design below.
 
 <p align="center">
 <img src="https://github.com/carlo4002/revolut_interview/blob/main/images/graph.png" alt="Architecture per node" width="600"/>
