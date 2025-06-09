@@ -1,5 +1,12 @@
+# Application Implementation
+
+It is implemented in flask and it will be listeing the port 5000. It will connect to the cluster postgres by using the service of HA proxy.
+
+For deployment reasons, the application will be in charge of the table and user app creation by using [init_db.sql](https://github.com/carlo4002/revolut_interview/blob/main/app/init_db.sql)
+
+
 ## Dependencies ##
-Install:
+### To Install:
 
     yum install python3 pyhton3-pip DONE
     pip3 install flask_sqlalchemy psycopg2  DONE
