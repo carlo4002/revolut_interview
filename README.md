@@ -13,6 +13,10 @@ Once infrastructure is deployed, a second phase is launched with ansible that wi
 - ETCD
 - HAproxy
 
+Here the repositories that contains the ansible playbooks
+
+- [haproxy deploymeny](https://github.com/carlo4002/deployement_postgres)
+- [postgres deployment](https://github.com/carlo4002/deployement_postgres)
 
 ## Architecture Goals
 
